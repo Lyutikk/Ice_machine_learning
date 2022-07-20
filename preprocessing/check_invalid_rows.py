@@ -44,7 +44,7 @@ del result['p_r']
 
 fig = plt.figure()
 plt.scatter(points.lon, points.lat, s=2, c='k')
-for sic_name in ['osisaf', 'nsidc_v4', 'jaxa'][1:2]:
+for sic_name in ['osisaf', 'nsidc_v4', 'jaxa'][:]:
     sic = result.query('dataset == @sic_name')
 
     plt.scatter(sic.lon, sic.lat, c=datasets[sic_name],
