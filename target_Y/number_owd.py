@@ -51,7 +51,7 @@ del result['p_r']
 # ------- Rolling and Normalizing  SANDBOX -------
 print('A')
 
-N = 500
+N = 180
 t = -1
 treshold = 30   # percents
 window = 15
@@ -96,7 +96,7 @@ for i, row in result.iterrows():
     target.loc[i, :] = tmp_Y
         
 
-    """
+    '''    
     new2 = row[:365].astype(float).rolling(window=window, center=True).median().values
     new2[:window//2] = arr[:window//2]
     new2[window//2:] = arr[window//2:]
@@ -127,10 +127,13 @@ for i, row in result.iterrows():
 #    plt.savefig(dpi=400)
     #plt.show()
     plt.close()
-    """
+    '''
+    
 
 #X = pd.read_csv('../input_data/X_jon.csv', sep=';', index_col=[0])
+result.to_csv("X_invalid_jon.csv", sep=';')
 Y_target = pd.read_csv('../input_data/Y_jon.csv', sep=';', index_col=[0])
+target.to_csv("Y_invalid_jon.csv", sep=';')
 Y_target.loc[target.index, :] = target.values
 Y_target.to_csv('../input_data/Y2_jon.csv', sep=';')
 

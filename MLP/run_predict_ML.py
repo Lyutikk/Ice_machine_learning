@@ -61,7 +61,7 @@ N = 100   # Number of MLP layers
 # Upload XY-data
 
 dic_box = {}
-for prefix in ['X', 'Y']:
+for prefix in ['X', 'Y2']:
     
     box = pd.read_csv('{}/{}_jon.csv'.format(input_path, prefix), sep=';',
                              index_col=[0])    #, decimal='.')
@@ -74,7 +74,7 @@ for prefix in ['X', 'Y']:
         box.columns = ['y{}'.format(s) for s in range(365)]
     
     box.reset_index(drop=True, inplace=True)
-    dic_box[prefix] = box
+    dic_box[prefix[:1]] = box
 
 
 # ===========================================================================
