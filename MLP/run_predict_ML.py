@@ -40,19 +40,14 @@ print(result)
 
 """
 
-import time
 import pickle
+import time
 
-import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
-
-from sklearn.neural_network import MLPClassifier
-from sklearn.preprocessing import MinMaxScaler #StandardScaler
-
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
-
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import MinMaxScaler  # StandardScaler
 
 input_path = r'../input_data'
 N = 100   # Number of MLP layers
@@ -61,7 +56,7 @@ N = 100   # Number of MLP layers
 # Upload XY-data
 
 dic_box = {}
-for prefix in ['X', 'Y2']:
+for prefix in ['X3', 'Y3']:
     
     box = pd.read_csv('{}/{}_jon.csv'.format(input_path, prefix), sep=';',
                              index_col=[0])    #, decimal='.')
