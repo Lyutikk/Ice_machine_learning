@@ -32,19 +32,19 @@ def check_outliers(an_array, max_deviations=2):
 
 datasets = dict(nsidc_v4='b', jaxa='r', osisaf='g')
 
-idf = pd.read_csv("d:/ml/pr/ice_machine_learning/input_data/X_small_iifp_jon.csv",
+idf = pd.read_csv("../input_data/X_small_iifp_jon.csv",
                   sep=';', index_col=[0]
                   )
 idf['state'] = 1
 
-invalid = pd.read_csv("d:/ml/pr/ice_machine_learning/input_data/X_invalid_jon.csv",
+invalid = pd.read_csv("../input_data/X_invalid_jon.csv",
                       sep=';', index_col=[0]
                       )
 invalid['state'] = 0
 
 idf = pd.concat((idf, invalid), axis=0)
 
-points = pd.read_csv("d:/ml/pr/ice_machine_learning/preprocessing/meta_309_points.csv", sep=';', index_col=[0])
+points = pd.read_csv("meta_309_points.csv", sep=';', index_col=[0])
 
 points['p'] = points.index.values
 idf['p'] = idf.index // 41
@@ -152,10 +152,10 @@ for i, row in result.iterrows():
 '''
 
 
-Y2_jon = pd.read_csv('d:/ml/pr/ice_machine_learning/input_data/Y2_jon.csv', sep=';', index_col=[0])
-X_jon = pd.read_csv('d:/ml/pr/ice_machine_learning/input_data/X_jon.csv', sep=';', index_col=[0])
+Y2_jon = pd.read_csv('../input_data/Y2_jon.csv', sep=';', index_col=[0])
+X_jon = pd.read_csv('../input_data/X_jon.csv', sep=';', index_col=[0])
 
-manual_check = pd.read_csv('d:/ml/pr/ice_machine_learning/target_Y/manual_check_iifp_lt_20_or_gt_200.csv', sep=';')
+manual_check = pd.read_csv('../target_Y/manual_check_iifp_lt_20_or_gt_200.csv', sep=';')
 manual_check.rename(columns={'Unnamed: 0':'index'})
 manual_check = result.query('iifp_Y_dur < 20 | iifp_Y_dur > 175')
 
@@ -177,7 +177,7 @@ manual_check = result.query('iifp_Y_dur < 20 | iifp_Y_dur > 175')
 #     plt.plot(manual_check.loc[i].iloc[:365], alpha=0.7, zorder=100, color='k', label='')
 #     plt.savefig()
 
-
+"""
 new2 = row[:365].astype(float).rolling(window=window, center=True).median().values
 new2[:window//2] = arr[:window//2]
 new2[window//2:] = arr[window//2:]
@@ -205,6 +205,7 @@ plt.grid(ls=':')
 #plt.savefig(dpi=400)
 plt.show()
 plt.close()
+"""
 
 '''
 i = 0
@@ -222,34 +223,44 @@ while i < 37:
     # plt.savefig('d:/ml/pr/pics/37_pics_manual_target/{}_point_manual.png'.format(i+1), format='png', dpi=350)
     i +=1
 '''  
-    
+
 #       Delete manual_check indecies from result, X_jon and Y2_jon:
 # =======================================================
 
-for i in range(len(manual_check)):
-    el = manual_check.index[i]
-    result = result.drop(index=[el])
-    X_jon = X_jon.drop(index=[el])
-    Y2_jon = Y2_jon.drop(index=[el])
+#for i in range(len(manual_check)):
+#    el = manual_check.index[i]
+#    result = result.drop(index=[el])
+#    X_jon = X_jon.drop(index=[el])
+#    Y2_jon = Y2_jon.drop(index=[el])
+
+el = manual_check.index
+result = result.drop(el)
+target = target.drop(el)
+X_jon = X_jon.drop(el)
+Y2_jon = Y2_jon.drop(el)
 
 
 #       Result split 70/30:
 # =======================================================
 
-result_test, result_train = train_test_split(result, test_size=0.70)  
-    
-result_train.to_csv('d:/ml/pr/ice_machine_learning/input_data/result_train_70.csv', sep=';')    
-result_test.to_csv('d:/ml/pr/ice_machine_learning/input_data/result_test_30.csv', sep=';')
-
+result_test, result_train, target_test, target_train = train_test_split(result, target, test_size=0.70)
+result_train.to_csv('../input_data/result_train_70.csv', sep=';')
+result_test.to_csv('../input_data/result_test_30.csv', sep=';')
+target_train.to_csv('../input_data/target_train_70.csv', sep=';')
+target_test.to_csv('../input_data/target_test_30.csv', sep=';')
 
 #      Remove 30% result from X_jon and Y2_jon:
-# =======================================================   
-for i in range(len(result_test)):
-    el = result.index[i]
-    X3_jon = X_jon.drop(index=[el])
-    Y3_jon = Y2_jon.drop(index=[el])
+# =======================================================
+#for i in range(len(result_test)):
+#    el = result.index[i]
+#    X3_jon = X_jon.drop(index=[el])
+#    Y3_jon = Y2_jon.drop(index=[el])
 
 
-X3_jon.to_csv('d:/ml/pr/ice_machine_learning/input_data/X3_jon.csv', sep=';')
-Y3_jon.to_csv('d:/ml/pr/ice_machine_learning/input_data/Y3_jon.csv', sep=';')
+X3_jon = X_jon.drop(result_test.index)
+Y3_jon = Y2_jon.drop(result_test.index)
+
+
+X3_jon.to_csv('../input_data/X3_jon.csv', sep=';')
+Y3_jon.to_csv('../input_data/Y3_jon.csv', sep=';')
 
