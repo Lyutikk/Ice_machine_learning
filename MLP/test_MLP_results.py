@@ -18,8 +18,8 @@ from sklearn.metrics import f1_score
 
 model_name = 'sic_MLP_100L.sav'
 scaler_name = 'scaler.pkl'
-y_file_path = r'd:/ml/pr/ice_machine_learning/input_data/Y3_jon.csv'
-x_file_path = r'd:/ml/pr/ice_machine_learning/input_data/X3_jon.csv'
+y_file_path = r'../input_data/Y3_jon.csv'
+x_file_path = r'../input_data/X3_jon.csv'
 
 # Upload ML model & scaler
 loaded_model = pickle.load(open(model_name, 'rb'))
@@ -52,7 +52,7 @@ plt.show()
 #        Testing on 30% result data (result_test): 
 # =======================================================
 
-result_test = pd.read_csv('d:/ml/pr/ice_machine_learning/input_data/Y3_jon.csv', sep=';', index_col=[0])
+result_test = pd.read_csv('../input_data/Y3_jon.csv', sep=';', index_col=[0])
 
 result_test_scaled = loaded_scaler.fit_transform(result_test.iloc[:, :365])
 Y_result_predicted = loaded_model.predict(result_test_scaled)
@@ -63,7 +63,7 @@ forecast = 100. * Y_result_predicted[N, :]
 analysis = 100. * Y_test.iloc[N, :].values
 origin = result_test.iloc[N, :365].values
 
-fig = plt.figure(figsize=(8,6))
+fig = plt.figure(figsize=(8, 6))
 plt.plot(origin, label='origin', c='k', zorder=100)
 plt.plot(forecast, label='forecast', c='b', zorder=100)
 plt.plot(analysis, label='analysis', c='r', lw=2., alpha=0.5)
